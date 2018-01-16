@@ -17,6 +17,52 @@ You can download the installation package:
 * [GitHub Releases](https://github.com/AncientSouls/SqlGraph/releases);
 * [Compilation from the source code](#build);
 
+## Description
+
+The purpose of the package is to search and analyze the ways of storing graphs in SQL databases. SQLite is used as the database and SQL language of the package, as the most universal representative of the SQL family.
+
+### Tasks
+
+- [ ] Random graph generator for tests
+- Random graph settings for different stress tests
+  - [ ] maxLeaves n
+  - insert
+    - [ ] chance %
+    - source
+      - [ ] new %
+      - [ ] old %
+      - [ ] old leaves %/roots %/edges %
+    - target
+      - [ ] new %
+      - [ ] old %
+      - [ ] old leaves %/roots %/edges %
+  - update
+    - [ ] chance %
+    - source
+      - [ ] chance %
+      - [ ] new %
+      - [ ] old %
+      - [ ] old leaves %/roots %/edges %
+    - target
+      - [ ] chance %
+      - [ ] new %
+      - [ ] old %
+      - [ ] old leaves %/roots %/edges %
+  - delete
+    - [ ] chance %
+- [ ] Recursive implementation (R)
+- Nested set
+  - [ ] Nested set implementation (NS)
+  - [ ] Nested set with multi position implementation for multi parents and recursions (NS+M)
+  - [ ] Nested set with merges and inherits implementation for multi parents and recursions (NS+MI)
+- Adjacency list
+  - [ ] Adjacency list implementation (AL)
+  - [ ] Adjacency list in 36 bit (AL36)
+  - [ ] Adjacency list with multi position implementation for multi parents and recursions (AL+M)
+  - [ ] Adjacency list in 36 bit with multi position implementation for multi parents and recursions (AL36+M)
+  - [ ] Adjacency list with merges and inherits implementation for multi parents and recursions (AL+MI)
+  - [ ] Adjacency list in 36 bit with merges and inherits implementation for multi parents and recursions (AL36+MI)
+
 ## Build
 
 To perform a self-assembly project or add your own turbo add-on, follow these simple steps:
