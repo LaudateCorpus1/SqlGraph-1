@@ -29,6 +29,7 @@
         "mocha": "^4.0.1"
     },
     "dependencies": {
+        "chance": "^1.0.13",
         "lodash": "^4.17.4"
     }
 }

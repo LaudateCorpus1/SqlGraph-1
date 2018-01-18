@@ -23,33 +23,38 @@ The purpose of the package is to search and analyze the ways of storing graphs i
 
 ### Tasks
 
-- [ ] Random graph generator for tests
+- [x] Random graph generator for tests
 - Random graph settings for different stress tests
   - [ ] maxLeaves n
+  - [x] operations n
   - insert
-    - [ ] chance %
+    - [x] chance %
     - source
-      - [ ] new %
-      - [ ] old %
+      - [x] new %
+      - [x] old %
       - [ ] old leaves %/roots %/edges %
+      - [ ] null %
     - target
-      - [ ] new %
-      - [ ] old %
+      - [x] new %
+      - [x] old %
       - [ ] old leaves %/roots %/edges %
+      - [ ] null %
   - update
-    - [ ] chance %
+    - [x] chance %
     - source
-      - [ ] chance %
-      - [ ] new %
-      - [ ] old %
+      - [x] ignore %
+      - [x] new %
+      - [x] old %
       - [ ] old leaves %/roots %/edges %
+      - [ ] null %
     - target
-      - [ ] chance %
-      - [ ] new %
-      - [ ] old %
+      - [x] ignore %
+      - [x] new %
+      - [x] old %
       - [ ] old leaves %/roots %/edges %
+      - [ ] null %
   - delete
-    - [ ] chance %
+    - [x] chance %
 - [ ] Recursive implementation (R)
 - Nested set
   - [ ] Nested set implementation (NS)
