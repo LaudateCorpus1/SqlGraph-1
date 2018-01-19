@@ -18,6 +18,7 @@ class Random {
       },
       update: {
         chance: 1,
+        insertIfBroken: true,
         source: {
           ignore: 1,
           new: 1,
@@ -31,6 +32,7 @@ class Random {
       },
       delete: {
         chance: 1,
+        insertIfBroken: true,
       },
     };
   }
@@ -79,12 +81,19 @@ class Random {
       op.sourceLogic = this.referenceWeights(this._settings, op.action, 'source');
       op.targetLogic = this.referenceWeights(this._settings, op.action, 'target');
       if (op.sourceLogic != 'ignore') op.link.source = this.reference(op.sourceLogic);
-      if (op.sourceLogic != 'ignore') op.link.target = this.reference(op.targetLogic);
+      if (op.targetLogic != 'ignore') op.link.target = this.reference(op.targetLogic);
       op.links[op.link.id] = op.link;
       op.link.operation = this.operations.length;
       this.operations.push(op);
     } else {
       this.brokenUpdates += 1;
+      if (this._settings.update.insertIfBroken) {
+        op.action = 'insert';
+        this.action(op);
+      } else {
+        op.broken = true;
+        this.operations.push(op);
+      }
     }
   }
   delete(op) {
@@ -98,6 +107,13 @@ class Random {
       this._availableLinks.splice(op.link.index, 1);
     } else {
       this.brokenDeletes += 1;
+      if (this._settings.delete.insertIfBroken) {
+        op.action = 'insert';
+        this.action(op);
+      } else {
+        op.broken = true;
+        this.operations.push(op);
+      }
     }
   }
   action(op) {
