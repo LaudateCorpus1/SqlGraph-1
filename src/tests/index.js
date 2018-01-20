@@ -11,7 +11,7 @@ function assertLinksValidRefs(random) {
 
 describe('AncientSouls/SqlGraph:', () => {
   describe('Random:', () => {
-    it('should only insert', () => {
+    it('(insert) should only insert', () => {
       var random = new Random({
         operations: 1000,
         insert: { chance: 1 },
@@ -35,9 +35,9 @@ describe('AncientSouls/SqlGraph:', () => {
         assert.notOk(op.broken);
       });
     });
-    it('should only one parent nodess without brokens', () => {
+    it('(new, old) should only one parent nodess without brokens', () => {
       var random = new Random({
-        operations: 1000,
+        operations: 10000,
         insert: { chance: 5, target: { old: 0, new: 1 } },
         update: { chance: 100, target: { old: 0, new: 1 } },
         delete: { chance: 100 },
@@ -61,9 +61,9 @@ describe('AncientSouls/SqlGraph:', () => {
         assert.notOk(op.broken);
       });
     });
-    it('should only one parent nodes with brokens', () => {
+    it('(new, old ,insertIfBroken false) should only one parent nodes with brokens', () => {
       var random = new Random({
-        operations: 1000,
+        operations: 10000,
         insert: { chance: 5, target: { old: 0, new: 1 } },
         update: { chance: 100, insertIfBroken: false, target: { old: 0, new: 1 } },
         delete: { chance: 100, insertIfBroken: false, },
@@ -86,6 +86,34 @@ describe('AncientSouls/SqlGraph:', () => {
         if (op.broken)
           assert.notProperty(op, 'link');
       });
+      assert.isAbove(random._roots.length, 0);
+    });
+    it('(root) should only one parent nodes trying build one unity tree without brokens', () => {
+      var random = new Random({
+        operations: 10000,
+        insert: { chance: 5, target: { old: 0, new: 1, root: 100000 } },
+        update: { chance: 100, target: { old: 0, new: 1, root: 100000 } },
+        delete: { chance: 100, },
+      });
+      
+      var multiParents = {};
+      var parents = {};
+      for (var l in random._availableLinks) {
+        let link = random._availableLinks[l];
+        parents[link.target] = parents[link.target]?parents[link.target]+1:1;
+        if (parents[link.target]>1) {
+          multiParents[link.target] = parents[link.target];
+        }
+      }
+
+      assert.deepEqual(multiParents, {});
+
+      assertLinksValidRefs(random);
+      _.each(random.operations, op => {
+        assert.property(op, 'link');
+        assert.notOk(op.broken);
+      });
+      assert.isBelow(random._roots.length, 10); // 0-3 typically
     });
   });
 });

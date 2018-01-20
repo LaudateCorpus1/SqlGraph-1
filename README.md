@@ -24,43 +24,43 @@ The purpose of the package is to search and analyze the ways of storing graphs i
 ### Tasks
 
 - [x] Random graph generator for tests
-- Random graph settings for different stress tests
+- Random graph settings for different stress tests (% chance of select current variant in others)
   - [ ] maxLeaves n
   - [x] operations n 1000
   - insert
     - [x] chance % 1
     - source
-      - [x] new % 1
-      - [x] old % 1
-      - [ ] leaves %
-      - [ ] roots %
-      - [ ] edges %
+      - [x] new % 1 - Create new node
+      - [x] old % 1 - Find random node
+      - [ ] leave %
+      - [x] root % 0 - Use root nodes in trees (nodes without incoming links), if exists
+      - [ ] edge %
       - [ ] null %
     - target
-      - [x] new % 1
-      - [x] old % 1
-      - [ ] leaves %
-      - [ ] roots %
-      - [ ] edges %
+      - [x] new % 1 - Create new node
+      - [x] old % 1 - Find random node
+      - [ ] leave %
+      - [x] root % 0 - Use root nodes in trees (nodes without incoming links), if exists
+      - [ ] edge %
       - [ ] null %
   - update
     - [x] chance % 1
     - [x] insertIfBroken +
     - source
       - [x] ignore % 1
-      - [x] new % 1
-      - [x] old % 1
-      - [ ] leaves %
-      - [ ] roots %
-      - [ ] edges %
+      - [x] new % 1 - Create new node
+      - [x] old % 1 - Find random node
+      - [ ] leave %
+      - [x] root % 0 - Use root nodes in trees (nodes without incoming links), if exists
+      - [ ] edge %
       - [ ] null %
     - target
       - [x] ignore % 1
-      - [x] new % 1
-      - [x] old % 1
-      - [ ] leaves %
-      - [ ] roots %
-      - [ ] edges %
+      - [x] new % 1 - Create new node
+      - [x] old % 1 - Find random node
+      - [ ] leave %
+      - [x] root % 0 - Use root nodes in trees (nodes without incoming links), if exists
+      - [ ] edge %
       - [ ] null %
   - delete
     - [x] chance % 1

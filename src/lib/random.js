@@ -10,10 +10,12 @@ class Random {
         source: {
           new: 1,
           old: 1,
+          root: 0,
         },
         target: {
           new: 1,
           old: 1,
+          root: 0,
         },
       },
       update: {
@@ -23,11 +25,13 @@ class Random {
           ignore: 1,
           new: 1,
           old: 1,
+          root: 0,
         },
         target: {
           ignore: 1,
           new: 1,
           old: 1,
+          root: 0,
         },
       },
       delete: {
@@ -46,6 +50,7 @@ class Random {
     var weights = [];
     _.each(from, (value, key) => {
       if (value > 0) {
+        if (key == 'root' && !this._roots.length) return;
         names.push(key);
         weights.push(value);
       }
@@ -67,8 +72,8 @@ class Random {
     op.link.id = ++this._linksIdCounter;
     op.sourceLogic = this.referenceWeights(this._settings, op.action, 'source');
     op.targetLogic = this.referenceWeights(this._settings, op.action, 'target');
-    op.link.source = this.reference(op.sourceLogic);
-    op.link.target = this.reference(op.targetLogic);
+    op.link.source = this.reference(op.sourceLogic, 'source');
+    op.link.target = this.reference(op.targetLogic, 'target');
     op.links[op.link.id] = op.link;
     op.link.operation = this.operations.length;
     this.operations.push(op);
@@ -80,8 +85,8 @@ class Random {
       op.link = this.inherit(this._availableLinks[_.random(0, this._availableLinks.length-1)]);
       op.sourceLogic = this.referenceWeights(this._settings, op.action, 'source');
       op.targetLogic = this.referenceWeights(this._settings, op.action, 'target');
-      if (op.sourceLogic != 'ignore') op.link.source = this.reference(op.sourceLogic);
-      if (op.targetLogic != 'ignore') op.link.target = this.reference(op.targetLogic);
+      if (op.sourceLogic != 'ignore') op.link.source = this.reference(op.sourceLogic, 'source');
+      if (op.targetLogic != 'ignore') op.link.target = this.reference(op.targetLogic, 'target');
       op.links[op.link.id] = op.link;
       op.link.operation = this.operations.length;
       this.operations.push(op);
@@ -89,7 +94,7 @@ class Random {
       this.brokenUpdates += 1;
       if (this._settings.update.insertIfBroken) {
         op.action = 'insert';
-        this.action(op);
+        this[op.action](op);
       } else {
         op.broken = true;
         this.operations.push(op);
@@ -109,21 +114,39 @@ class Random {
       this.brokenDeletes += 1;
       if (this._settings.delete.insertIfBroken) {
         op.action = 'insert';
-        this.action(op);
+        this[op.action](op);
       } else {
         op.broken = true;
         this.operations.push(op);
       }
     }
   }
-  action(op) {
+  action(action) {
+    var op = {};
+    op.action = action || this.actionsWeights(this._settings);
+    this._links = op.links = this.inherit(this._links);
+
     this[op.action](op);
   }
-  reference(logic) {
+  reference(logic, key) {
     if (logic == 'new') {
-      return ++this._nodesIdCounter;
+      var ref = ++this._nodesIdCounter;
+      this._roots.push(ref);
+      return ref;
     } else if (logic == 'old') {
-      return this._nodesIdCounter?_.random(1, this._nodesIdCounter):++this._nodesIdCounter;
+      if (!this._nodesIdCounter) return this.reference('new', key);
+      else {
+        var ref = _.random(1, this._nodesIdCounter);
+        _.remove(this._roots, r => r==ref);
+        return ref;
+      }
+    } else if (logic == 'root') {
+      var i = _.random(0,this._roots.length-1);
+      var ref = this._roots[i];
+      if (key == 'target') {
+        this._roots.splice(i,1);
+      }
+      return ref;
     }
   }
   constructor(settings) {
@@ -135,16 +158,14 @@ class Random {
     this._deletedLinks = [];
     this._linksIdCounter = 0;
     this._nodesIdCounter = 0;
+
+    this._roots = [];
     
     this.brokenUpdates = 0;
     this.brokenDeletes = 0;
   
     for (var o = 0; o < this._settings.operations; o++) {
-      var op = {};
-      op.action = this.actionsWeights(this._settings);
-      this._links = op.links = this.inherit(this._links);
-
-      this.action(op);
+      this.action();
     }
   }
 }
